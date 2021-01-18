@@ -26,6 +26,7 @@ const (
 	referrerPolicyHeader = "Referrer-Policy"
 	featurePolicyHeader  = "Feature-Policy"
 	expectCTHeader       = "Expect-CT"
+	cacheControl         = "Cache-Control"
 
 	ctxDefaultSecureHeaderKey = secureCtxKey("SecureResponseHeader")
 	cspNonceSize              = 16
@@ -100,6 +101,8 @@ type Options struct {
 	ExpectCTHeader string
 	// SecureContextKey allows a custom key to be specified for context storage.
 	SecureContextKey string
+	// CacheControl allows a custom key to be specified for cache control.
+	CacheControl string
 }
 
 // Secure is a middleware that helps setup a few basic security features. A single secure.Options struct can be
@@ -429,6 +432,11 @@ func (s *Secure) processRequest(w http.ResponseWriter, r *http.Request) (http.He
 	// Expect-CT header.
 	if len(s.opt.ExpectCTHeader) > 0 {
 		responseHeader.Set(expectCTHeader, s.opt.ExpectCTHeader)
+	}
+
+	// Cache Control header.
+	if len(s.opt.CacheControl) > 0 {
+		responseHeader.Set(cacheControl, s.opt.CacheControl)
 	}
 
 	return responseHeader, r, nil
