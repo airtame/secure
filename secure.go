@@ -27,6 +27,7 @@ const (
 	featurePolicyHeader  = "Feature-Policy"
 	expectCTHeader       = "Expect-CT"
 	cacheControl         = "Cache-Control"
+	pragma               = "Pragma"
 
 	ctxDefaultSecureHeaderKey = secureCtxKey("SecureResponseHeader")
 	cspNonceSize              = 16
@@ -437,6 +438,11 @@ func (s *Secure) processRequest(w http.ResponseWriter, r *http.Request) (http.He
 	// Cache Control header.
 	if len(s.opt.CacheControl) > 0 {
 		responseHeader.Set(cacheControl, s.opt.CacheControl)
+
+		// If Cache Control is enabled and HTTP client is on 1.0, use Pragma for backwards compatibility
+		if r.ProtoMajor == 1 && r.ProtoMinor == 0 {
+			responseHeader.Set(pragma, "no-cache")
+		}
 	}
 
 	return responseHeader, r, nil

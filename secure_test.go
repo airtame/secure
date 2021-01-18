@@ -1434,6 +1434,22 @@ func TestCacheControl(t *testing.T) {
 	expect(t, res.Header().Get("Cache-Control"), "no-cache")
 }
 
+func TestPragma(t *testing.T) {
+	s := New(Options{
+		CacheControl: "no-cache",
+	})
+
+	res := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/foo", nil)
+	req.ProtoMajor = 1
+	req.ProtoMinor = 0
+
+	s.Handler(myHandler).ServeHTTP(res, req)
+
+	expect(t, res.Code, http.StatusOK)
+	expect(t, res.Header().Get("Pragma"), "no-cache")
+}
+
 /* Test Helpers */
 func expect(t *testing.T, a interface{}, b interface{}) {
 	if a != b {
