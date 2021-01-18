@@ -1,4 +1,4 @@
-module github.com/unrolled/secure
+module github.com/adrianlungu/secure
 
 go 1.13
 
