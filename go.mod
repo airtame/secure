@@ -1,4 +1,4 @@
-module github.com/adrianlungu/secure
+module github.com/airtame/secure
 
 go 1.13
 
